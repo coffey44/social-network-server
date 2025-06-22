@@ -1,4 +1,3 @@
-// server/controllers/user.controller.ts
 import { Request, Response } from "express";
 import User from "../models/user.model";
 import mongoose from "mongoose";
@@ -105,8 +104,8 @@ export const getCurrentUser = async (req: Request, res: Response) => {
 
 export const getAllUsers = async (req: Request, res: Response) => {
   try {
-    const users = await User.find().limit(10); // you can change the limit
-    res.json(users); // return plain array
+    const users = await User.find().limit(10); 
+    res.json(users); 
   } catch (err) {
     console.error("Error in getAllUsers:", err);
     res.status(500).json({ error: "Failed to fetch users" });
@@ -115,7 +114,7 @@ export const getAllUsers = async (req: Request, res: Response) => {
 
 export const followUser = async (req: Request, res: Response) => {
   try {
-    const currentUserId = req.session.userId; // <-- FIXED
+    const currentUserId = req.session.userId;
     const targetUserId = req.params.id;
 
     if (!currentUserId || currentUserId === targetUserId) {
@@ -140,7 +139,7 @@ export const followUser = async (req: Request, res: Response) => {
 
 export const unfollowUser = async (req: Request, res: Response) => {
   try {
-    const currentUserId = req.session.userId; // <-- FIXED
+    const currentUserId = req.session.userId;
     const targetUserId = req.params.id;
 
     if (!currentUserId || currentUserId === targetUserId) {

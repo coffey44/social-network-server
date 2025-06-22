@@ -1,4 +1,3 @@
-// server/controllers/review.controller.ts
 import { Request, Response } from "express";
 import Review from "../models/review.model";
 import User from "../models/user.model";

@@ -1,4 +1,3 @@
-// server/routes/review.routes.ts
 import { Router } from "express";
 import { createReview, 
     getReviewsByMovieId, 

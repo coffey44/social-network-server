@@ -1,4 +1,3 @@
-// server/controllers/post.controller.ts
 import { Request, Response } from "express";
 import Post from "../models/post.model";
 import User from "../models/user.model";

@@ -11,5 +11,5 @@
     "baseUrl": ".",
 
   },
-  "include": ["./**/*", "types", "src/types"] // ✅ Add your session types folder here
+  "include": ["./**/*", "types", "src/types"]
 }

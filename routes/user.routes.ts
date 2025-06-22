@@ -1,4 +1,3 @@
-// server/routes/user.routes.ts
 import { Router } from "express";
 import {
   getUserById,

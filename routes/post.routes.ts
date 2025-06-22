@@ -1,4 +1,3 @@
-// server/routes/post.routes.ts
 import { Router } from "express";
 import { createPost, getPostsByMovieId, getFeedPosts, getPublicPosts } from "../controllers/post.controller";
 
