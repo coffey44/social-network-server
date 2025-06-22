@@ -9,8 +9,7 @@
     "forceConsistentCasingInFileNames": true,
     "outDir": "./dist",
     "rootDir": "./",
-    "baseUrl": ".",
-
+    "baseUrl": "."
   },
-  "include": ["./**/*", "types", "src/types"]
+  "include": ["server.ts", "controllers/**/*", "models/**/*", "routes/**/*", "types", "src/types"]
 }
