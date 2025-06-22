@@ -20,7 +20,7 @@ app.use(
   })
 );
 
-
+// Middle ware
 app.use(express.json());
 
 app.use(
@@ -36,6 +36,7 @@ app.use(
   })
 );
 
+// Mongo DB Connection
 mongoose
   .connect(process.env.MONGO_URI || "mongodb://localhost:27017/socialnetwork")
   .then(() => console.log("✅ Connected to MongoDB"))
