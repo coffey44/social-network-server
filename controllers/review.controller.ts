@@ -24,7 +24,7 @@ export const createReview = async (req: Request, res: Response) => {
 
     await newReview.save();
     res.status(201).json(newReview);
-  } catch (err) {
+  } catch (err: unknown) {
     res.status(500).json({ message: "Failed to create review", error: err });
   }
 };
@@ -35,7 +35,7 @@ export const getReviewsByMovieId = async (req: Request, res: Response) => {
       .populate("author", "username role")
       .sort({ createdAt: -1 });
     res.json(reviews);
-  } catch (err) {
+  } catch (err: unknown) {
     res.status(500).json({ message: "Failed to fetch reviews", error: err });
   }
 };
@@ -56,7 +56,7 @@ export const getFeedReviews = async (req: Request, res: Response) => {
       .populate("author", "username role");
 
     res.json(reviews);
-  } catch (err) {
+  } catch (err: unknown) {
     res.status(500).json({ message: "Error fetching reviews", error: err });
   }
 };
@@ -69,7 +69,7 @@ export const getReviewsByUserId = async (req: Request, res: Response) => {
       .populate("author", "username role")
       .sort({ createdAt: -1 });
     res.json(reviews);
-  } catch (err) {
+  } catch (err: unknown) {
     res.status(500).json({ message: "Failed to fetch reviews", error: err });
   }
 };
@@ -88,7 +88,7 @@ export const deleteReview = async (req: Request, res: Response) => {
 
     await Review.findByIdAndDelete(reviewId);
     res.status(200).json({ message: "Review deleted successfully." });
-  } catch (err) {
+  } catch (err: unknown) {
     res.status(500).json({ message: "Error deleting review." });
   }
 };

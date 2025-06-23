@@ -14,7 +14,7 @@ export const createPost = async (req: Request, res: Response) => {
     const post = new Post({ movieId, content, author: userId });
     await post.save();
     res.status(201).json(post);
-  } catch (err) {
+  } catch (err: unknown) {
     res.status(500).json({ message: "Failed to create post", error: err });
   }
 };
@@ -25,7 +25,7 @@ export const getPostsByMovieId = async (req: Request, res: Response) => {
       .populate("author", "username role")
       .sort({ createdAt: -1 });
     res.json(posts);
-  } catch (err) {
+  } catch (err: unknown) {
     res.status(500).json({ message: "Failed to fetch posts", error: err });
   }
 };
@@ -46,7 +46,7 @@ export const getFeedPosts = async (req: Request, res: Response) => {
       .populate("author", "username role");
 
     res.status(200).json(posts);
-  } catch (err) {
+  } catch (err: unknown) {
     res.status(500).json({ message: "Failed to load feed", error: err });
   }
 };
@@ -58,7 +58,7 @@ export const getPublicPosts = async (req: Request, res: Response) => {
       .limit(6)
       .populate("author", "username role");
     res.json(posts);
-  } catch (err) {
+  } catch (err:unknown) {
     console.error("Failed to fetch public posts:", err);
     res.status(500).json({ message: "Error fetching posts" });
   }

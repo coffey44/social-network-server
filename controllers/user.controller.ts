@@ -12,7 +12,7 @@ export const getUserById = async (req: Request, res: Response) => {
 
     if (!user) return res.status(404).json({ message: "User not found" });
     res.json(user);
-  } catch (err) {
+  } catch (err: unknown) {
     res.status(500).json({ message: "Error fetching user", error: err });
   }
 };
@@ -39,7 +39,7 @@ export const updateProfile = async (req: Request, res: Response) => {
     if (!updated) return res.status(404).json({ message: "User not found" });
 
     res.status(200).json({ message: "Profile updated", user: updated });
-  } catch (err) {
+  } catch (err: unknown) {
     res.status(500).json({ message: "Update failed", error: err });
   }
 };
@@ -62,7 +62,7 @@ export const addBookmark = async (req: Request, res: Response) => {
     }
 
     res.status(200).json({ message: "Bookmarked!" });
-  } catch (err) {
+  } catch (err: unknown) {
     res.status(500).json({ message: "Bookmarking failed", error: err });
   }
 };
@@ -82,7 +82,7 @@ export const removeBookmark = async (req: Request, res: Response) => {
     await user.save();
 
     res.status(200).json({ message: "Bookmark removed!" });
-  } catch (err) {
+  } catch (err: unknown) {
     res.status(500).json({ message: "Removing bookmark failed", error: err });
   }
 };
@@ -106,7 +106,7 @@ export const getAllUsers = async (req: Request, res: Response) => {
   try {
     const users = await User.find().limit(10); 
     res.json(users); 
-  } catch (err) {
+  } catch (err: unknown) {
     console.error("Error in getAllUsers:", err);
     res.status(500).json({ error: "Failed to fetch users" });
   }
@@ -131,7 +131,7 @@ export const followUser = async (req: Request, res: Response) => {
     }
 
     res.status(200).json({ message: "Followed successfully", following: currentUser.following });
-  } catch (err) {
+  } catch (err: unknown) {
     console.error(err);
     res.status(500).json({ message: "Follow failed" });
   }
@@ -155,7 +155,7 @@ export const unfollowUser = async (req: Request, res: Response) => {
     await currentUser.save();
 
     res.status(200).json({ message: "Unfollowed successfully", following: currentUser.following });
-  } catch (err) {
+  } catch (err: unknown) {
     console.error(err);
     res.status(500).json({ message: "Unfollow failed" });
   }
@@ -176,7 +176,7 @@ export const updateUserInfo = async (req: Request, res: Response) => {
 
     const updatedUser = await User.findByIdAndUpdate(userId, updates, { new: true }).select("-password");
     res.json(updatedUser);
-  } catch (err) {
+  } catch (err: unknown) {
     res.status(500).json({ message: "Failed to update user." });
   }
 };

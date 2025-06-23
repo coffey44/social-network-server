@@ -23,7 +23,7 @@ export const register = async (req: Request, res: Response) => {
       message: "Registered successfully",
       user: { _id: newUser._id, username, email, role }
     });
-  } catch (err) {
+  } catch (err: unknown) {
     res.status(500).json({ message: "Registration failed", error: err });
   }
 };
@@ -45,7 +45,7 @@ export const login = async (req: Request, res: Response) => {
       message: "Logged in",
       user: { _id: user._id, username: user.username, email: user.email, role: user.role }
     });
-  } catch (err) {
+  } catch (err: unknown) {
     res.status(500).json({ message: "Login failed", error: err });
   }
 };
@@ -67,7 +67,7 @@ export const getCurrentUser = async (req: Request, res: Response) => {
     if (!user) return res.status(404).json({ message: "User not found" });
 
     res.status(200).json({ id: user._id, username: user.username, role: user.role });
-  } catch (err) {
+  } catch (err: unknown) {
     res.status(500).json({ message: "Failed to fetch user", error: err });
   }
 };
