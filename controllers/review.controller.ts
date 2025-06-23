@@ -4,16 +4,23 @@ import User from "../models/user.model";
 
 export const createReview = async (req: Request, res: Response) => {
   const userId = req.session.userId;
-  if (!userId) return res.status(401).json({ message: "Not logged in" });
+  if (!userId) {
+    res.status(401).json({ message: "Not logged in" });
+    return;
+  }
 
   const { movieId, rating, comment } = req.body;
-  if (!movieId || !rating || !comment)
-    return res.status(400).json({ message: "Missing required fields" });
+  if (!movieId || !rating || !comment) {
+    res.status(400).json({ message: "Missing required fields" });
+    return;
+  }
 
   try {
     const existing = await Review.findOne({ movieId, author: userId });
-    if (existing)
-      return res.status(400).json({ message: "You've already reviewed this!" });
+    if (existing) {
+      res.status(400).json({ message: "You've already reviewed this!" });
+      return;
+    }
 
     const newReview = new Review({
       movieId,
@@ -42,12 +49,16 @@ export const getReviewsByMovieId = async (req: Request, res: Response) => {
 
 export const getFeedReviews = async (req: Request, res: Response) => {
   const userId = req.session.userId;
-  if (!userId) return res.status(401).json({ message: "Not logged in" });
+  if (!userId) {
+    res.status(401).json({ message: "Not logged in" });
+    return;
+  }
 
   try {
     const user = await User.findById(userId);
     if (!user) {
-      return res.status(404).json({ message: "User not found" });
+      res.status(404).json({ message: "User not found" });
+      return;
     }
     const authorIds = [userId.toString(), ...user.following.map(id => id.toString())];
 
@@ -64,7 +75,10 @@ export const getFeedReviews = async (req: Request, res: Response) => {
 export const getReviewsByUserId = async (req: Request, res: Response) => {
   try {
     const { userId } = req.query;
-    if (!userId) return res.status(400).json({ message: "Missing userId" });
+    if (!userId) {
+      res.status(400).json({ message: "Missing userId" });
+      return;
+    }
     const reviews = await Review.find({ author: userId })
       .populate("author", "username role")
       .sort({ createdAt: -1 });
@@ -80,10 +94,14 @@ export const deleteReview = async (req: Request, res: Response) => {
     const userId = req.session.userId;
 
     const review = await Review.findById(reviewId);
-    if (!review) return res.status(404).json({ message: "Review not found." });
+    if (!review) {
+      res.status(404).json({ message: "Review not found." });
+      return;
+    }
 
     if (review.author.toString() !== userId) {
-      return res.status(403).json({ message: "Not authorized to delete this review." });
+      res.status(403).json({ message: "Not authorized to delete this review." });
+      return;
     }
 
     await Review.findByIdAndDelete(reviewId);

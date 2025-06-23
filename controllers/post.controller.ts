@@ -4,11 +4,16 @@ import User from "../models/user.model";
 
 export const createPost = async (req: Request, res: Response) => {
   const userId = req.session.userId;
-  if (!userId) return res.status(401).json({ message: "Not logged in" });
+  if (!userId) {
+    res.status(401).json({ message: "Not logged in" });
+    return;
+  }
 
   const { movieId, content } = req.body;
-  if (!movieId || !content)
-    return res.status(400).json({ message: "Missing required fields" });
+  if (!movieId || !content) {
+    res.status(400).json({ message: "Missing required fields" });
+    return;
+  }
 
   try {
     const post = new Post({ movieId, content, author: userId });
@@ -32,12 +37,16 @@ export const getPostsByMovieId = async (req: Request, res: Response) => {
 
 export const getFeedPosts = async (req: Request, res: Response) => {
   const userId = req.session.userId;
-  if (!userId) return res.status(401).json({ message: "Not logged in" });
+  if (!userId) {
+    res.status(401).json({ message: "Not logged in" });
+    return;
+  }
 
   try {
     const user = await User.findById(userId);
     if (!user) {
-      return res.status(404).json({ message: "User not found" });
+      res.status(404).json({ message: "User not found" });
+      return;
     }
     const authorIds = [userId.toString(), ...user.following.map(id => id.toString())];
 

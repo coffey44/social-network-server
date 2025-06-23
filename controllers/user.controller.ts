@@ -10,7 +10,10 @@ export const getUserById = async (req: Request, res: Response) => {
       .select("username email role bookmarks following")
       .populate("following", "username");
 
-    if (!user) return res.status(404).json({ message: "User not found" });
+    if (!user) {
+      res.status(404).json({ message: "User not found" });
+      return;
+    }
     res.json(user);
   } catch (err) {
     res.status(500).json({ message: "Error fetching user", error: err });
@@ -21,7 +24,10 @@ export const updateProfile = async (req: Request, res: Response) => {
   const userId = req.session.userId;
   const { username, email, password } = req.body;
 
-  if (!userId) return res.status(401).json({ message: "Not logged in" });
+  if (!userId) {
+    res.status(401).json({ message: "Not logged in" });
+    return;
+  }
 
   try {
     const updates: any = {};
@@ -36,7 +42,10 @@ export const updateProfile = async (req: Request, res: Response) => {
       new: true,
     }).select("username email role bookmarks following");
 
-    if (!updated) return res.status(404).json({ message: "User not found" });
+    if (!updated) {
+      res.status(404).json({ message: "User not found" });
+      return;
+    }
 
     res.status(200).json({ message: "Profile updated", user: updated });
   } catch (err) {
@@ -49,12 +58,21 @@ export const addBookmark = async (req: Request, res: Response) => {
   const userId = req.session.userId;
   const { imdbID } = req.body;
 
-  if (!userId) return res.status(401).json({ message: "Not logged in" });
-  if (!imdbID) return res.status(400).json({ message: "Missing imdbID" });
+  if (!userId) {
+    res.status(401).json({ message: "Not logged in" });
+    return;
+  }
+  if (!imdbID) {
+    res.status(400).json({ message: "Missing imdbID" });
+    return;
+  }
 
   try {
     const user = await User.findById(userId);
-    if (!user) return res.status(404).json({ message: "User not found" });
+    if (!user) {
+      res.status(404).json({ message: "User not found" });
+      return;
+    }
 
     if (!user.bookmarks.includes(imdbID)) {
       user.bookmarks.push(imdbID);
@@ -71,12 +89,21 @@ export const removeBookmark = async (req: Request, res: Response) => {
   const userId = req.session.userId;
   const { imdbID } = req.body;
 
-  if (!userId) return res.status(401).json({ message: "Not logged in" });
-  if (!imdbID) return res.status(400).json({ message: "Missing imdbID" });
+  if (!userId) {
+    res.status(401).json({ message: "Not logged in" });
+    return;
+  }
+  if (!imdbID) {
+    res.status(400).json({ message: "Missing imdbID" });
+    return;
+  }
 
   try {
     const user = await User.findById(userId);
-    if (!user) return res.status(404).json({ message: "User not found" });
+    if (!user) {
+      res.status(404).json({ message: "User not found" });
+      return;
+    }
 
     user.bookmarks = user.bookmarks.filter(id => id !== imdbID);
     await user.save();
@@ -90,11 +117,17 @@ export const removeBookmark = async (req: Request, res: Response) => {
 export const getCurrentUser = async (req: Request, res: Response) => {
   const userId = req.session.userId;
 
-  if (!userId) return res.status(401).json({ message: "Not logged in" });
+  if (!userId) {
+    res.status(401).json({ message: "Not logged in" });
+    return;
+  }
 
   try {
     const user = await User.findById(userId).select("username role bookmarks");
-    if (!user) return res.status(404).json({ message: "User not found" });
+    if (!user) {
+      res.status(404).json({ message: "User not found" });
+      return;
+    }
 
     res.status(200).json(user);
   } catch (err) {
@@ -118,11 +151,15 @@ export const followUser = async (req: Request, res: Response) => {
     const targetUserId = req.params.id;
 
     if (!currentUserId || currentUserId === targetUserId) {
-      return res.status(400).json({ message: "Invalid follow request." });
+      res.status(400).json({ message: "Invalid follow request." });
+      return;
     }
 
     const currentUser = await User.findById(currentUserId);
-    if (!currentUser) return res.status(404).json({ message: "Current user not found" });
+    if (!currentUser) {
+      res.status(404).json({ message: "Current user not found" });
+      return;
+    }
 
     const targetObjectId = new mongoose.Types.ObjectId(targetUserId);
     if (!currentUser.following.includes(targetObjectId)) {
@@ -143,11 +180,15 @@ export const unfollowUser = async (req: Request, res: Response) => {
     const targetUserId = req.params.id;
 
     if (!currentUserId || currentUserId === targetUserId) {
-      return res.status(400).json({ message: "Invalid unfollow request." });
+      res.status(400).json({ message: "Invalid unfollow request." });
+      return;
     }
 
     const currentUser = await User.findById(currentUserId);
-    if (!currentUser) return res.status(404).json({ message: "Current user not found" });
+    if (!currentUser) {
+      res.status(404).json({ message: "Current user not found" });
+      return;
+    }
 
     currentUser.following = currentUser.following.filter(
       (id: any) => id.toString() !== targetUserId
